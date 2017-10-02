@@ -21,6 +21,10 @@ class Client
     private $_timeout;
     private $_orderBy;
     private $_equalTo;
+    private $_startAt;
+    private $_endAt;
+    private $_limitToFirst;
+    private $_limitToLast;
 
     /**
      * Constructor
@@ -144,26 +148,70 @@ class Client
     }
 
     /**
-     * Search data from Firebase with a GET request
+     * Filter for search using get()
      *
-     * @return array
+     * @return Client
      */
-     public function search($orderBy, $equalTo)
-     {
-         try
-         {
-             $this->_orderBy = $orderBy;
-             $this->_equalTo = $equalTo;
-             $ch = $this->curl('GET');
-             $return = curl_exec($ch);
-             curl_close($ch);
-             return json_decode($return, true);
-         } catch (Exception $e)
-         {
-             //...
-         }
-         return null;
-     }
+    public function orderBy($orderBy)
+    {
+        $this->_orderBy = $orderBy;
+        return $this;
+    }
+
+    /**
+     * Filter for search using get()
+     *
+     * @return Client
+     */
+    public function equalTo($equalTo)
+    {
+        $this->_equalTo = $equalTo;
+        return $this;
+    }
+
+    /**
+     * Filter for search using get()
+     *
+     * @return Client
+     */
+    public function startAt($startAt)
+    {
+        $this->_startAt = $startAt;
+        return $this;
+    }
+
+    /**
+     * Filter for search using get()
+     *
+     * @return Client
+     */
+    public function endAt($endAt)
+    {
+        $this->_endAt = $endAt;
+        return $this;
+    }
+    
+    /**
+     * Filter for search using get()
+     *
+     * @return Client
+     */
+    public function limitToFirst($limitToFirst)
+    {
+        $this->_limitToFirst = $limitToFirst;
+        return $this;
+    }
+
+    /**
+     * Filter for search using get()
+     *
+     * @return Client
+     */
+    public function limitToLast($limitToLast)
+    {
+        $this->_limitToLast = $limitToLast;
+        return $this;
+    }
 
     /**
      * Generate curl object
@@ -188,6 +236,10 @@ class Client
             {
                 $pre = "&";
             }
+            else
+            {
+                $pre = "?";
+            }
 
             $url = sprintf('%s'. $pre .'orderBy="%s"', $url, $this->_orderBy);
 
@@ -195,6 +247,27 @@ class Client
             {
                 $url = sprintf('%s&equalTo=%s', $url, $this->_equalTo);
             }
+
+            if ($this->_startAt)
+            {
+                $url = sprintf('%s&startAt=%s', $url, $this->_startAt);
+            }
+
+            if ($this->_endAt)
+            {
+                $url = sprintf('%s&endAt=%s', $url, $this->_endAt);
+            }
+
+            if ($this->_limitToFirst)
+            {
+                $url = sprintf('%s&limitToFirst=%s', $url, $this->_limitToFirst);
+            }
+
+            if ($this->_limitToLast)
+            {
+                $url = sprintf('%s&limitToLast=%s', $url, $this->_limitToLast);
+            }
+
         }
 
         $ch = curl_init();
