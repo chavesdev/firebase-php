@@ -19,6 +19,8 @@ class Client
     private $_host;
     private $_token;
     private $_timeout;
+    private $_orderBy;
+    private $_equalTo;
 
     /**
      * Constructor
@@ -142,6 +144,28 @@ class Client
     }
 
     /**
+     * Search data from Firebase with a GET request
+     *
+     * @return array
+     */
+     public function search($orderBy, $equalTo)
+     {
+         try
+         {
+             $this->_orderBy = $orderBy;
+             $this->_equalTo = $equalTo;
+             $ch = $this->curl('GET');
+             $return = curl_exec($ch);
+             curl_close($ch);
+             return json_decode($return, true);
+         } catch (Exception $e)
+         {
+             //...
+         }
+         return null;
+     }
+
+    /**
      * Generate curl object
      *
      * @param string $mode
@@ -154,6 +178,23 @@ class Client
         if ($this->_token)
         {
             $url = sprintf('%s?auth=%s', $url, $this->_token);
+        }
+
+        if ($this->_orderBy)
+        {
+            $pre = "";
+
+            if ($this->_token)
+            {
+                $pre = "&";
+            }
+
+            $url = sprintf('%s'. $pre .'orderBy=%s', $url, $this->_orderBy);
+
+            if ($this->_equalTo)
+            {
+                $url = sprintf('%s&equalTo=%s', $url, $this->_equalTo);
+            }
         }
 
         $ch = curl_init();
