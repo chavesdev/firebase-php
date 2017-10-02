@@ -189,7 +189,7 @@ class Client
                 $pre = "&";
             }
 
-            $url = sprintf('%s'. $pre .'orderBy=%s', $url, $this->_orderBy);
+            $url = sprintf('%s'. $pre .'orderBy="%s"', $url, $this->_orderBy);
 
             if ($this->_equalTo)
             {
