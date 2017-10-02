@@ -8,11 +8,15 @@
     "firebase php",
     "firebase php client"
   ],
-  "version": "1.0.0",
+  "version": "1.1.0",
   "authors": [
     {
       "name": "Ron Masas",
       "email": "ronmasas@gmail.com"
+    },
+    {
+      "name": "Lucas Mousinho",
+      "email": "lucmousinho@gmail.com"
     }
   ],
   "license": "MIT",
